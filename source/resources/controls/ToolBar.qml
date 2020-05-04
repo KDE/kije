@@ -104,6 +104,7 @@ QQC2.ToolBar {
         spacing: 0
         z: 99
         Repeater {
+            id: repeat
             model: _private.actions
             delegate: QQC2.ToolButton {
                 id: button
@@ -119,6 +120,16 @@ QQC2.ToolBar {
 
                     drag.target: parent
                     drag.threshold: 2
+                    Connections {
+                        target: dragArea.drag
+                        function onActiveChanged() {
+                            if (dragArea.drag.active) {
+                                button.parent = toolbarRoot
+                            } else {
+                                button.parent = repeat
+                            }
+                        }
+                    }
                     onReleased: {
                         let mapped = dragArea.mapToItem(toolbarRow, dragArea.mouseX, dragArea.mouseY)
                         if (mapped.y > toolbarRow.height) {
