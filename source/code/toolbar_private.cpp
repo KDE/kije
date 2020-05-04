@@ -1,14 +1,16 @@
 #include "toolbar_private.h"
 
-int ToolbarPrivate::calculateDragIndex(QQuickItem *rowLayout, qreal currentDragX)
+int ToolbarPrivate::calculateDragIndex(QQuickItem *rowLayout, QQuickItem *draggee, qreal currentDragX)
 {
     QList<int> midpoints;
     for (const auto &item: rowLayout->childItems()) {
-        midpoints << (item->x() + (item->width() / 2));
+        if (item != draggee) {
+            midpoints << (item->x() + (item->width() / 2));
+        }
     }
     for (int leftIndex = 0, rightIndex = 1; rightIndex < midpoints.length();) {
         if (midpoints[leftIndex] < currentDragX && currentDragX <= midpoints[rightIndex]) {
-            return rightIndex+1;
+            return rightIndex;
         }
         leftIndex++;
         rightIndex++;
