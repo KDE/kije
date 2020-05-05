@@ -10,6 +10,7 @@
 #define URI(x) fromBase(QStringLiteral(x))
 
 void KijetesantakaluPlugin::registerTypes(const char * uri) {
-    qmlRegisterType(URI("controls/ToolBar.qml"), PUBLIC_URI, 1, 0, "ToolBar");
+    qmlRegisterType(URI("controls/toolbar/ToolBar.qml"), PUBLIC_URI, 1, 0, "ToolBar");
+    qmlRegisterType(URI("controls/action/Action.qml"), PUBLIC_URI, 1, 0, "Action");
     qmlRegisterSingletonType<ToolbarPrivate>(PRIVATE_URI, 1, 0, "ToolbarPrivate", [](QQmlEngine*, QJSEngine*) { return new ToolbarPrivate; });
 }
