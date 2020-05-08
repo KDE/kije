@@ -3,6 +3,8 @@ import org.kde.kirigami 2.12 as Kirigami
 
 Kirigami.ShadowedRectangle {
     id: toolsBox
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+    color: Kirigami.Theme.backgroundColor
     anchors {
         left: parent.left
         leftMargin: Kirigami.Units.largeSpacing*10
