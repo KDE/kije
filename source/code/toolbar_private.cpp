@@ -1,4 +1,6 @@
 #include "toolbar_private.h"
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 int ToolbarPrivate::calculateDragIndex(QQuickItem *rowLayout, QQuickItem *draggee, qreal currentDragX)
 {
@@ -25,3 +27,33 @@ int ToolbarPrivate::calculateDragIndex(QQuickItem *rowLayout, QQuickItem *dragge
         }
     }();
 };
+
+QVariantList ToolbarPrivate::recallToolbar(const QString &id)
+{
+    auto config = KSharedConfig::openConfig();
+    auto group = config->group("org.kde.kijetesantakalu");
+    auto toolbarsGroup = group.group("toolbars");
+    return toolbarsGroup.readEntry(id, QVariantList());
+}
+
+void ToolbarPrivate::serializeToolbar(const QString &id, QQmlListReference data)
+{
+    auto config = KSharedConfig::openConfig();
+    auto group = config->group("org.kde.kijetesantakalu");
+    auto toolbarsGroup = group.group("toolbars");
+    QVariantList list;
+    for (int index = 0; index < data.count(); index++) {
+        list << data.at(index)->property("identifier");
+    }
+    toolbarsGroup.writeEntry(id, list);
+    toolbarsGroup.config()->sync();
+}
+
+void ToolbarPrivate::forgetToolbar(const QString &id)
+{
+    auto config = KSharedConfig::openConfig();
+    auto group = config->group("org.kde.kijetesantakalu");
+    auto toolbarsGroup = group.group("toolbars");
+    toolbarsGroup.writeEntry(id, "");
+    toolbarsGroup.config()->sync();
+}

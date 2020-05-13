@@ -24,6 +24,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(KF5Config)
 
 file (
     GLOB kSources

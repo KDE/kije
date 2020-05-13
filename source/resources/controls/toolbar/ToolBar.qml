@@ -11,6 +11,7 @@ QQC2.ToolBar {
     property alias editMode: editBox.checked
 
     z: 100
+    property string identifier: ""
     property var defaultActions: []
     property list<Action> potentialActions
 
@@ -29,6 +30,21 @@ QQC2.ToolBar {
         property list<Action> alwaysPresentActions: [
             PrivateExpandingAction{}
         ]
+        function pushActions(list) {
+            for (let action of list) {
+                for (let i = 0; i < _private.allActions.length; i++) {
+                    let comp = _private.allActions[i]
+                    if (action == comp.identifier) {
+                        _private.actions.push(comp)
+                    }
+                }
+            }
+        }
+        function save() {
+            if (toolbarRoot.identifier != "") {
+                ToolbarPrivate.serializeToolbar(toolbarRoot.identifier, _private.actions)
+            }
+        }
     }
 
     function syncActions() {
@@ -41,12 +57,12 @@ QQC2.ToolBar {
     onPotentialActionsChanged: syncActions()
 
     Component.onCompleted: {
-        for (let action of toolbarRoot.defaultActions) {
-            for (let i = 0; i < _private.allActions.length; i++) {
-                let comp = _private.allActions[i]
-                if (action == comp.identifier) {
-                    _private.actions.push(comp)
-                }
+        _private.pushActions(toolbarRoot.defaultActions)
+        if (toolbarRoot.identifier != "") {
+            let list = ToolbarPrivate.recallToolbar(toolbarRoot.identifier)
+            if (list != []) {
+                _private.actions = []
+                _private.pushActions(list)
             }
         }
         syncActions()
@@ -84,6 +100,7 @@ QQC2.ToolBar {
                     let actionArray = Array.from(_private.actions)
                     actionArray.splice(event.source.exposedIndex, 1)
                     _private.actions = actionArray
+                    _private.save()
                 }
             }
         }
@@ -113,6 +130,7 @@ QQC2.ToolBar {
                                 let actions = Array.from(_private.actions)
                                 actions.push(modelData)
                                 _private.actions = actions
+                                _private.save()
                             }
                         }
                     }
@@ -130,7 +148,10 @@ QQC2.ToolBar {
                 margins: Kirigami.Units.largeSpacing
             }
             text: "Reset"
-            onClicked: _private.actions = toolbarRoot.defaultActions
+            onClicked: {
+                _private.actions = toolbarRoot.defaultActions
+                _private.save()
+            }
         }
     }
 
@@ -175,6 +196,7 @@ QQC2.ToolBar {
                 actionArray.splice(calc, 0, event.source.action)
                 _private.actions = actionArray
             }
+            _private.save()
         }
     }
 }
