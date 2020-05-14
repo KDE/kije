@@ -13,7 +13,7 @@ Kirigami.AbstractApplicationWindow {
     PrivateStackView {
         id: __layers
         anchors.fill: parent
-        ColumnLayout {
+        initialItem: ColumnLayout {
             anchors.fill: parent
             spacing: 0
 
@@ -28,7 +28,7 @@ Kirigami.AbstractApplicationWindow {
             }
             PrivateStackView {
                 id: __stack
-                ColumnLayout {
+                initialItem: ColumnLayout {
                     id: __nestedColumn
 
                     Layout.fillWidth: true
