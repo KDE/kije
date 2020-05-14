@@ -30,6 +30,7 @@ file (
     GLOB kSources
     source/code/kijetesantakalu_plugin.cpp
     source/code/toolbar_private.cpp
+    source/code/dock_private.cpp
 )
 file ( GLOB kHeaders source/code/headers/*.h )
 

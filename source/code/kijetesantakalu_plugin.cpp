@@ -1,5 +1,6 @@
 #include <QQmlEngine>
 
+#include "dock_private.h"
 #include "toolbar_private.h"
 
 #include "kijetesantakalu_plugin.h"
@@ -16,5 +17,7 @@ void KijetesantakaluPlugin::registerTypes(const char * uri) {
     qmlRegisterType(URI("controls/welcome/WelcomeScreen.qml"), PUBLIC_URI, 1, 0, "WelcomeScreen");
     qmlRegisterType(URI("controls/welcome/WelcomeSection.qml"), PUBLIC_URI, 1, 0, "WelcomeSection");
     qmlRegisterType(URI("controls/welcome/WelcomeItem.qml"), PUBLIC_URI, 1, 0, "WelcomeItem");
+    qmlRegisterType(URI("controls/dock/DockItem.qml"), PUBLIC_URI, 1, 0, "DockItem");
     qmlRegisterSingletonType<ToolbarPrivate>(PRIVATE_URI, 1, 0, "ToolbarPrivate", [](QQmlEngine*, QJSEngine*) { return new ToolbarPrivate; });
+    qmlRegisterSingletonType<DockPrivate>(PRIVATE_URI, 1, 0, "DockPrivate", [](QQmlEngine*, QJSEngine*) { return new DockPrivate; });
 }
