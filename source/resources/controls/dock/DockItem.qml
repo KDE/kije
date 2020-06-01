@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Layouts 1.10
 import QtQuick.Window 2.12
 import org.kde.kirigami 2.12 as Kirigami
 import org.kde.kijetesantakalu.private 1.0
@@ -17,6 +18,10 @@ Item {
 
     property Item item: Item {
         id: __contentItem
+        height: childrenRect.height
+        width: childrenRect.width
+        Layout.preferredWidth: childrenRect.width
+        Layout.preferredHeight: childrenRect.height
         implicitWidth: childrenRect.width
         implicitHeight: childrenRect.height
         parent: {
@@ -44,7 +49,12 @@ Item {
         }
         height: childrenRect.height
         width: childrenRect.width
-        DragHandler {}
+        DragHandler {
+            yAxis.minimum: 0
+            yAxis.maximum: DockPrivate.rootItem(__dockRoot.parent).height - __innerWindow.height
+            xAxis.minimum: 0
+            xAxis.maximum: DockPrivate.rootItem(__dockRoot.parent).width - __innerWindow.width
+        }
     }
     property Window ownWindow: Window {
         id: __ownWindow
