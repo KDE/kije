@@ -2,7 +2,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.10
 import QtQuick.Window 2.12
 import org.kde.kirigami 2.12 as Kirigami
-import org.kde.kijetesantakalu.private 1.0
+import org.kde.kije.private 1.0
 
 Item {
     id: __dockRoot

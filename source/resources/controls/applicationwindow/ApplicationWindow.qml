@@ -2,7 +2,7 @@ import QtQuick 2.12
 import org.kde.kirigami 2.12 as Kirigami
 import QtQuick.Controls 2.13 as QQC2
 import QtQuick.Layouts 1.12
-import org.kde.kijetesantakalu 1.0
+import org.kde.kije 1.0
 
 Kirigami.AbstractApplicationWindow {
     property alias toolbar: __toolbar
@@ -20,7 +20,7 @@ Kirigami.AbstractApplicationWindow {
             ToolBar {
                 id: __toolbar
 
-                identifier: "kijetesantakalu-applicationwindow-primary"
+                identifier: "kije-applicationwindow-primary"
 
                 Layout.fillWidth: true
                 Layout.fillHeight: false

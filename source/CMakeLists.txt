@@ -1,7 +1,7 @@
 include_directories(code/headers)
 
 add_library(
-    kijetesantakaluplugin
+    kijeplugin
     SHARED
 
     ${kSources} ${kHeaders} ${qrcFile}
@@ -9,13 +9,13 @@ add_library(
 )
 
 target_compile_options(
-    kijetesantakaluplugin
+    kijeplugin
     PRIVATE
     -Wall -Werror
 )
 
 target_link_libraries(
-    kijetesantakaluplugin
+    kijeplugin
     PRIVATE
         Qt5::Core
         Qt5::Quick
@@ -24,13 +24,13 @@ target_link_libraries(
 )
 
 add_custom_command(
-    TARGET kijetesantakaluplugin
+    TARGET kijeplugin
     POST_BUILD
     COMMAND
         ${CMAKE_COMMAND} -E copy
         ${CMAKE_CURRENT_LIST_DIR}/resources/qmldir
-        $<TARGET_FILE_DIR:kijetesantakaluplugin>/resources/qmldir
+        $<TARGET_FILE_DIR:kijeplugin>/resources/qmldir
 )
 
-install(FILES resources/qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kijetesantakalu)
-install(DIRECTORY resources/controls DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kijetesantakalu)
+install(FILES resources/qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kije)
+install(DIRECTORY resources/controls DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kije)

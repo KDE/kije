@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QQmlExtensionPlugin>
 
-class KijetesantakaluPlugin : public QQmlExtensionPlugin
+class KijePlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)

@@ -4,7 +4,7 @@ set(KF5_VERSION "5.70.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.70.0") # handled by release scripts
 set(REQUIRED_QT_VERSION 5.12.0)
 
-project(Kijetesantakalu LANGUAGES CXX VERSION ${KF5_VERSION})
+project(Kije LANGUAGES CXX VERSION ${KF5_VERSION})
 
 include(GNUInstallDirs)
 
@@ -28,7 +28,7 @@ find_package(KF5Config)
 
 file (
     GLOB kSources
-    source/code/kijetesantakalu_plugin.cpp
+    source/code/kije_plugin.cpp
     source/code/toolbar_private.cpp
     source/code/dock_private.cpp
 )
@@ -42,5 +42,5 @@ file ( GLOB pluginData qrc/qmldir qrc/plugin.qmltypes )
 
 add_subdirectory(source)
 
-install( TARGETS kijetesantakaluplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kijetesantakalu )
-install( FILES ${pluginData} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kijetesantakalu )
+install( TARGETS kijeplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kije )
+install( FILES ${pluginData} DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kije )

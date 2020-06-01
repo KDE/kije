@@ -1,6 +1,6 @@
-module org.kde.kijetesantakalu
+module org.kde.kije
 
-classname KijetesantakaluPlugin
-plugin kijetesantakaluplugin
+classname KijePlugin
+plugin kijeplugin
 
 typeinfo plugins.qmltypes
