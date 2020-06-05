@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12 as QQC2
 import QtQuick.Layouts 1.12

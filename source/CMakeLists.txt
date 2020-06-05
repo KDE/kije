@@ -1,3 +1,9 @@
+#
+#  SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
+#
+#  SPDX-License-Identifier: LGPL-2.0-or-later
+#
+
 include_directories(code/headers)
 
 add_library(

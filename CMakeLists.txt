@@ -1,3 +1,9 @@
+#
+#  SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
+#
+#  SPDX-License-Identifier: LGPL-2.0-or-later
+#
+
 cmake_minimum_required(VERSION 3.5)
 
 set(KF5_VERSION "5.70.0") # handled by release scripts
