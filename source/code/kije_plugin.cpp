@@ -24,6 +24,7 @@ void KijePlugin::registerTypes(const char * uri) {
     qmlRegisterType(URI("controls/welcome/WelcomeSection.qml"), PUBLIC_URI, 1, 0, "WelcomeSection");
     qmlRegisterType(URI("controls/welcome/WelcomeItem.qml"), PUBLIC_URI, 1, 0, "WelcomeItem");
     qmlRegisterType(URI("controls/dock/DockItem.qml"), PUBLIC_URI, 1, 0, "DockItem");
+    qmlRegisterType(URI("controls/dock/DockBox.qml"), PUBLIC_URI, 1, 0, "DockBox");
     qmlRegisterSingletonType<ToolbarPrivate>(PRIVATE_URI, 1, 0, "ToolbarPrivate", [](QQmlEngine*, QJSEngine*) { return new ToolbarPrivate; });
     qmlRegisterSingletonType<DockPrivate>(PRIVATE_URI, 1, 0, "DockPrivate", [](QQmlEngine*, QJSEngine*) { return new DockPrivate; });
 }

@@ -6,7 +6,6 @@
 
 import QtQuick 2.12
 import QtQuick.Layouts 1.10
-import QtQuick.Window 2.12
 import org.kde.kirigami 2.12 as Kirigami
 import org.kde.kije.private 1.0
 
@@ -17,7 +16,6 @@ Item {
     default property alias children: __contentItem.children
 
     enum DockingStyle {
-        FloatingOwnWindow,
         FloatingInnerWindow,
         DockedInWindow
     }
@@ -34,8 +32,6 @@ Item {
             switch (__dockRoot.dockingStyle) {
                 case DockItem.DockingStyle.DockedInWindow:
                     return __dockRoot.parent
-                case DockItem.DockingStyle.FloatingOwnWindow:
-                    return __ownWindowContentItem
                 case DockItem.DockingStyle.FloatingInnerWindow:
                     return __innerWindow
             }
@@ -60,22 +56,6 @@ Item {
             yAxis.maximum: DockPrivate.rootItem(__dockRoot.parent).height - __innerWindow.height
             xAxis.minimum: 0
             xAxis.maximum: DockPrivate.rootItem(__dockRoot.parent).width - __innerWindow.width
-        }
-    }
-    property Window ownWindow: Window {
-        id: __ownWindow
-        visible: __dockRoot.dockingStyle == DockItem.DockingStyle.FloatingOwnWindow
-        flags: Qt.Window | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.Tool | Qt.WindowCloseButtonHint | Qt.WindowStaysOnTopHint
-        height: __ownWindowContentItem.height
-        width: __ownWindowContentItem.width
-        minimumHeight: height
-        minimumWidth: width
-        maximumHeight: height
-        maximumWidth: width
-        Item {
-            id: __ownWindowContentItem
-            implicitWidth: childrenRect.width
-            implicitHeight: childrenRect.height
         }
     }
 }
