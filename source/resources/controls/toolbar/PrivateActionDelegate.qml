@@ -32,6 +32,7 @@ Item {
         id: buttonComponent
         QQC2.ToolButton {
             text: delegateRoot.action.text
+            enabled: delegateRoot.action.enabled
             onClicked: delegateRoot.action.trigger()
         }
     }
