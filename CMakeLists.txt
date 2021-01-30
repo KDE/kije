@@ -20,7 +20,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(ECM ${KF5_VERSION} NO_MODULE)
@@ -37,8 +37,15 @@ file (
     source/code/kije_plugin.cpp
     source/code/toolbar_private.cpp
     source/code/dock_private.cpp
+    source/code/router/jsfunction.cpp
+    source/code/router/router.cpp
 )
-file ( GLOB kHeaders source/code/headers/*.h )
+
+file (
+    GLOB kHeaders
+    source/code/headers/*.h
+    source/code/headers/router/*.h
+)
 
 file ( GLOB qrcContent source/resources/* )
 list ( FILTER qrcContent EXCLUDE REGEX ".*qrc$" )

@@ -11,6 +11,9 @@
 
 #include "kije_plugin.h"
 
+#include "router/routerslot.h"
+#include "router/router.h"
+
 #define PUBLIC_URI "org.kde.kije"
 #define PRIVATE_URI "org.kde.kije.private"
 
@@ -27,4 +30,9 @@ void KijePlugin::registerTypes(const char * uri) {
     qmlRegisterType(URI("controls/dock/DockBox.qml"), PUBLIC_URI, 1, 0, "DockBox");
     qmlRegisterSingletonType<ToolbarPrivate>(PRIVATE_URI, 1, 0, "ToolbarPrivate", [](QQmlEngine*, QJSEngine*) { return new ToolbarPrivate; });
     qmlRegisterSingletonType<DockPrivate>(PRIVATE_URI, 1, 0, "DockPrivate", [](QQmlEngine*, QJSEngine*) { return new DockPrivate; });
+
+    // The router.
+    qmlRegisterType<RouterSlot>(PUBLIC_URI, 1, 0, "RouterSlot");
+    qmlRegisterType<Router>(PUBLIC_URI, 1, 0, "Router");
+    qmlRegisterType<Route>(PUBLIC_URI, 1, 0, "Route");
 }
