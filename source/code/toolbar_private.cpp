@@ -5,8 +5,13 @@
  */
 
 #include "toolbar_private.h"
+
 #include <KSharedConfig>
 #include <KConfigGroup>
+
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 int ToolbarPrivate::calculateDragIndex(QQuickItem *rowLayout, QQuickItem *draggee, qreal currentDragX)
 {
@@ -34,12 +39,42 @@ int ToolbarPrivate::calculateDragIndex(QQuickItem *rowLayout, QQuickItem *dragge
     }();
 };
 
-QVariantList ToolbarPrivate::recallToolbar(const QString &id)
+QJsonArray ToolbarPrivate::recallToolbar(const QString &id)
 {
     auto config = KSharedConfig::openConfig();
     auto group = config->group("org.kde.kije");
     auto toolbarsGroup = group.group("toolbars");
-    return toolbarsGroup.readEntry(id, QVariantList());
+    return QJsonDocument::fromJson(toolbarsGroup.readEntry(id, QString("[]")).toLocal8Bit()).array();
+}
+
+const std::list<const char*> PROPERTIES = {
+    "identifier",
+    "shortcut"
+};
+
+static QJsonObject toJsonObject(QObject* obj)
+{
+    QJsonObject ret;
+
+    for (auto prop : PROPERTIES) {
+        ret[prop] = QJsonValue::fromVariant(obj->property(prop));
+    }
+
+    qDebug() << ret;
+
+    return ret;
+}
+
+static void fromJsonObject(const QJsonObject& map, QObject* obj)
+{
+    for (auto prop : PROPERTIES) {
+        obj->setProperty(prop, map[prop]);
+    }
+}
+
+void ToolbarPrivate::setOn(QJsonObject from, QObject *on)
+{
+    fromJsonObject(from, on);
 }
 
 void ToolbarPrivate::serializeToolbar(const QString &id, QQmlListReference data)
@@ -47,11 +82,11 @@ void ToolbarPrivate::serializeToolbar(const QString &id, QQmlListReference data)
     auto config = KSharedConfig::openConfig();
     auto group = config->group("org.kde.kije");
     auto toolbarsGroup = group.group("toolbars");
-    QVariantList list;
+    QJsonArray list;
     for (int index = 0; index < data.count(); index++) {
-        list << data.at(index)->property("identifier");
+        list << toJsonObject(data.at(index));
     }
-    toolbarsGroup.writeEntry(id, list);
+    toolbarsGroup.writeEntry(id, QJsonDocument(list).toJson());
     toolbarsGroup.config()->sync();
 }
 

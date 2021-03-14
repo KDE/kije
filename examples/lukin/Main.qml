@@ -17,6 +17,7 @@ Kije.ApplicationWindow {
                 text: "Back"
                 displayName: "Go Backwards"
                 enabled: appy.backStack.length > 0
+                defaultShortcut: "Ctrl+A"
 
                 onTriggered: appy.clickBack()
             },
@@ -25,6 +26,7 @@ Kije.ApplicationWindow {
                 text: "Forward"
                 displayName: "Go Forwards"
                 enabled: appy.forwardStack.length > 0
+                defaultShortcut: "Ctrl+D"
 
                 onTriggered: appy.clickForward()
             },
@@ -32,6 +34,7 @@ Kije.ApplicationWindow {
                 identifier: "up"
                 text: "Up"
                 displayName: "Go Up"
+                defaultShortcut: "Ctrl+W"
 
                 onTriggered: appy.clickGoTo(folderModel.parentFolder)
             },

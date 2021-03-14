@@ -40,8 +40,9 @@ QQC2.ToolBar {
             for (let action of list) {
                 for (let i = 0; i < _private.allActions.length; i++) {
                     let comp = _private.allActions[i]
-                    if (action == comp.identifier) {
+                    if (action.identifier == comp.identifier) {
                         _private.actions.push(comp)
+                        ToolbarPrivate.setOn(action, comp)
                     }
                 }
             }
