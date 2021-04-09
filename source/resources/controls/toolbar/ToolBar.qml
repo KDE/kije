@@ -52,6 +52,7 @@ QQC2.ToolBar {
                 ToolbarPrivate.serializeToolbar(toolbarRoot.identifier, _private.actions)
             }
         }
+        Component.onDestruction: save()
     }
 
     function syncActions() {
