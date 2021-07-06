@@ -12,7 +12,7 @@
 int main(int argc, char* argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setApplicationName("org.kde.Tok");
+    QCoreApplication::setApplicationName("kije-widgets-qmlrunner");
     QCoreApplication::setOrganizationName("KDE");
 
     QApplication app(argc, argv);
