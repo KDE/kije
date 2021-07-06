@@ -168,7 +168,7 @@ QQC2.ToolBar {
 
     RowLayout {
         id: toolbarRow
-        spacing: 0
+        spacing: 4
         anchors {
             left: parent.left
             right: parent.right
