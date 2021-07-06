@@ -163,10 +163,16 @@ QQC2.ToolBar {
         }
     }
 
+    implicitHeight: toolbarRow.implicitHeight + topPadding + bottomPadding
+    implicitWidth: toolbarRow.implicitWidth + leftPadding + rightPadding
+
     RowLayout {
         id: toolbarRow
-        anchors.fill: parent
         spacing: 0
+        anchors {
+            left: parent.left
+            right: parent.right
+        }
         z: 99
         Repeater {
             id: repeat
