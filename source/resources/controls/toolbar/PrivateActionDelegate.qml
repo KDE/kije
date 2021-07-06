@@ -58,7 +58,7 @@ Item {
     }
     Component {
         id: buttonComponent
-        QQC2.ToolButton {
+        QQC2.Button {
             text: delegateRoot.action.text
             enabled: delegateRoot.action.enabled
             onClicked: delegateRoot.action.trigger()
