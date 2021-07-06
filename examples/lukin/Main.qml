@@ -63,6 +63,19 @@ Kije.ApplicationWindow {
     property var backStack: []
     property var forwardStack: []
 
+    onSaveState: (obj) => {
+        obj["backStack"] = this.backStack
+        obj["forwardStack"] = this.forwardStack
+        obj["location"] = folderModel.folder
+    }
+    onRestoreState: (obj) => {
+        this.backStack = obj["backStack"] || []
+        this.forwardStack = obj["forwardStack"] || []
+        if (obj["location"]) {
+            folderModel.folder = obj["location"]
+        }
+    }
+
     function clickGoTo(folder) {
         backStack = backStack.concat([folderModel.folder])
         forwardStack = []

@@ -98,3 +98,21 @@ void ToolbarPrivate::forgetToolbar(const QString &id)
     toolbarsGroup.writeEntry(id, "");
     toolbarsGroup.config()->sync();
 }
+
+void ToolbarPrivate::saveJSON(const QString& id, const QString& it)
+{
+    auto config = KSharedConfig::openConfig();
+    auto group = config->group("org.kde.kije");
+    auto toolbarsGroup = group.group("windowstates");
+    toolbarsGroup.writeEntry(id, it);
+    toolbarsGroup.config()->sync();
+}
+
+QString ToolbarPrivate::recallJSON(const QString& id)
+{
+    auto config = KSharedConfig::openConfig();
+    auto group = config->group("org.kde.kije");
+    auto toolbarsGroup = group.group("windowstates");
+
+    return toolbarsGroup.readEntry<QString>(id, QString("{}"));
+}

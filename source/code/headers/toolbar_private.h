@@ -19,4 +19,7 @@ public:
     Q_INVOKABLE void serializeToolbar(const QString &id, QQmlListReference data);
     Q_INVOKABLE void forgetToolbar(const QString &id);
     Q_INVOKABLE void setOn(QJsonObject from, QObject* on);
+
+    Q_INVOKABLE void saveJSON(const QString& id, const QString& it);
+    Q_INVOKABLE QString recallJSON(const QString& id);
 };

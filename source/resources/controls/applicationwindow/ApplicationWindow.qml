@@ -9,12 +9,26 @@ import org.kde.kirigami 2.12 as Kirigami
 import QtQuick.Controls 2.13 as QQC2
 import QtQuick.Layouts 1.12
 import org.kde.kije 1.0
+import org.kde.kije.private 1.0
 
 Kirigami.AbstractApplicationWindow {
     property alias toolbar: __toolbar
     default property alias children: __nestedColumn.children
     property alias layers: __layers
     property alias stack: __stack
+
+    signal saveState(var obj)
+    signal restoreState(var obj)
+
+    Component.onCompleted: {
+        const obj = JSON.parse(ToolbarPrivate.recallJSON("primary-window"))
+        restoreState(obj)
+    }
+    Component.onDestruction: function() {
+        const obj = {}
+        saveState(obj)
+        ToolbarPrivate.saveJSON("primary-window", JSON.stringify(obj))
+    }
 
     PrivateStackView {
         id: __layers
