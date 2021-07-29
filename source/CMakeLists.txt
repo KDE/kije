@@ -4,8 +4,6 @@
 #  SPDX-License-Identifier: LGPL-2.0-or-later
 #
 
-include_directories(code/headers)
-
 add_library(
     kijeplugin
     SHARED
@@ -24,6 +22,7 @@ target_link_libraries(
     kijeplugin
     PRIVATE
         Qt5::Core
+        Qt5::Gui
         Qt5::Quick
         Qt5::Qml
         KF5::ConfigCore

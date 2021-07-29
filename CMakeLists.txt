@@ -29,16 +29,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 
-find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick Gui REQUIRED)
 find_package(KF5Config)
 
-file (
-    GLOB kSources
-    source/code/kije_plugin.cpp
-    source/code/toolbar_private.cpp
-    source/code/dock_private.cpp
-)
-file ( GLOB kHeaders source/code/headers/*.h )
+file ( GLOB kSources source/code/*.cpp )
+file ( GLOB kHeaders source/code/*.h )
 
 file ( GLOB qrcContent source/resources/* )
 list ( FILTER qrcContent EXCLUDE REGEX ".*qrc$" )
