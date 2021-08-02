@@ -13,6 +13,7 @@
 #include <KSharedConfig>
 
 #include "kije_window.h"
+#include "kije_app.h"
 
 struct KijeWindow::Private
 {
@@ -91,6 +92,8 @@ void KijeWindow::restoreScreen()
 
 void KijeWindow::componentComplete()
 {
+    KijeAbstractApp::instance()->attachMenubar(this);
+
     auto config = KSharedConfig::openConfig();
     auto group = config->group("org.kde.kije").group("windows").group(d->identifier);
 

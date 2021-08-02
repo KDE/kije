@@ -23,6 +23,7 @@ target_link_libraries(
     PRIVATE
         Qt5::Core
         Qt5::Gui
+        Qt5::GuiPrivate
         Qt5::Quick
         Qt5::Qml
         KF5::ConfigCore

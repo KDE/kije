@@ -10,6 +10,7 @@
 #include <QQmlListProperty>
 
 class KijeAction;
+class QWindow;
 
 class KijeAbstractApp : public QObject
 {
@@ -21,6 +22,7 @@ class KijeAbstractApp : public QObject
     static KijeAbstractApp* s_instance;
 
     Q_PROPERTY(QQmlListProperty<KijeAction> actions READ actions)
+    Q_PROPERTY(QQmlListProperty<KijeAction> menubar READ menubar)
 
 public:
 
@@ -29,7 +31,10 @@ public:
 
     static KijeAbstractApp* instance();
 
+    Q_INVOKABLE void attachMenubar(QWindow* win);
+
     QQmlListProperty<KijeAction> actions();
+    QQmlListProperty<KijeAction> menubar();
     Q_INVOKABLE KijeAction* lookupAction(const QString& name) const;
 
 };

@@ -8,6 +8,29 @@ DocApp {
             identifier: "foo"
         }
     ]
+    menubar: [
+        Action {
+            text: "SimpleEdit"
+        },
+        Action {
+            text: "File"
+        },
+        Action {
+            text: "Edit"
+
+            Action {
+                text: "Cut"
+
+                Action {
+                    text: "Cut"
+
+                    Action {
+                        text: "Cut"
+                    }
+                }
+            }
+        }
+    ]
 
     property Window win: Window {
         id: win
