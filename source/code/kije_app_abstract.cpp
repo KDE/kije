@@ -4,6 +4,8 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include "kije_action.h"
+
 #include "kije_app.h"
 
 struct KijeAbstractApp::Private
@@ -34,4 +36,15 @@ KijeAbstractApp* KijeAbstractApp::instance()
 QQmlListProperty<KijeAction> KijeAbstractApp::actions()
 {
     return QQmlListProperty<KijeAction>{this, &d->actions};
+}
+
+KijeAction* KijeAbstractApp::lookupAction(const QString &name) const
+{
+    for (auto action : d->actions) {
+        if (action->identifier() == name) {
+            return action;
+        }
+    }
+
+    return nullptr;
 }

@@ -25,4 +25,6 @@ public:
     QString identifier() const;
     void setIdentifier(const QString& identifier);
     Q_SIGNAL void identifierChanged();
+
+    Q_INVOKABLE void triggered();
 };

@@ -30,6 +30,7 @@ public:
     static KijeAbstractApp* instance();
 
     QQmlListProperty<KijeAction> actions();
+    Q_INVOKABLE KijeAction* lookupAction(const QString& name) const;
 
 };
 
