@@ -4,6 +4,13 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include <QKeySequence>
+#include <QQuickItem>
+#include <QQuickRenderControl> 
+#include <QQuickWindow>
+
+#include <QtGui/private/qguiapplication_p.h>
+
 #include "kije_action_p.h"
 
 KijeAction::KijeAction(QObject* parent) : QObject(parent), d(new Private)
@@ -52,3 +59,86 @@ const QList<KijeAction*> KijeAction::cxxChildActions()
 {
     return d->actions;
 }
+
+QVariant KijeAction::shortcut() const
+{
+    return d->shortcut;
+}
+
+// determines whether or not an item is ready to
+// accept shortcuts, needed for the shortcutmap
+// implementation
+bool matcher(QObject *forObject, Qt::ShortcutContext context)
+{
+    if (context == Qt::ApplicationShortcut) {
+        return true;
+    }
+
+    // we aren't widgets, so WidgetShortcut
+    // and WidgetWithChildrenShortcut aren't
+    // applicable here
+    if (context != Qt::WindowShortcut) {
+        return false;
+    }
+
+    QQuickItem* climbingIten = nullptr;
+    QObject* climbingObject = forObject;
+
+    // yay for tree climbing
+    while (climbingObject && !climbingObject->isWindowType()) {
+        climbingIten = qobject_cast<QQuickItem *>(climbingObject);
+        if (climbingIten && climbingIten->window()) {
+            climbingObject = climbingIten->window();
+            break;
+        }
+        climbingObject = climbingObject->parent();
+    }
+
+    // for reasons, the qquickwindow is not necessarily the actual qwindow
+    // that interacts with the windowing system
+    auto actualWindow = QQuickRenderControl::renderWindowFor(qobject_cast<QQuickWindow *>(climbingObject));
+    if (actualWindow != nullptr) {
+        climbingObject = actualWindow;
+    }
+
+    return climbingObject && climbingObject == QGuiApplication::focusWindow();
+}
+
+void KijeAction::setShortcut(const QVariant& shortcut)
+{
+    if (d->shortcut == shortcut) {
+        return;
+    }
+
+    if (d->shortcutHandle.has_value()) {
+        // TODO: figure out, do we need the sequence? the handle + object
+        // seems like it should be enough, but the removeShortcut argument
+        // takes a sequence
+        auto seq = toSequence(d->shortcut);
+
+        QGuiApplicationPrivate::instance()->shortcutMap.removeShortcut(*d->shortcutHandle, this, seq);
+    }
+
+    d->shortcut = shortcut;
+
+    auto seq = toSequence(shortcut);
+    if (!seq.isEmpty()) {
+        d->shortcutHandle =
+            QGuiApplicationPrivate::instance()->shortcutMap.addShortcut(this, seq, Qt::WindowShortcut, matcher);
+    } else {
+        d->shortcutHandle.reset();
+    }
+
+    Q_EMIT shortcutChanged();
+}
+
+bool KijeAction::enabled() const
+{
+    return d->enabled;
+}
+
+void KijeAction::setEnabled(bool enabled)
+{
+    synthesize_set(enabled, enabledChanged)
+}
+

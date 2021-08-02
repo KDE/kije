@@ -15,21 +15,7 @@ DocApp {
         Action {
             text: "File"
         },
-        Action {
-            text: "Edit"
-
-            Action {
-                text: "Cut"
-
-                Action {
-                    text: "Cut"
-
-                    Action {
-                        text: "Cut"
-                    }
-                }
-            }
-        }
+        EditAction { }
     ]
 
     property Window win: Window {

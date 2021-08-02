@@ -26,7 +26,7 @@ void KijePlugin::registerTypes(const char * uri) {
     qmlRegisterType<KijeAction>(PUBLIC_URI, 1, 0, "Action");
     qmlRegisterType<KijeWindow>(PUBLIC_URI, 1, 0, "Window");
 
-    // qmlRegisterType(URI("controls/toolbar/ToolBar.qml"), PUBLIC_URI, 1, 0, "ToolBar");
+    qmlRegisterType(URI("controls/actions/EditAction.qml"), PUBLIC_URI, 1, 0, "EditAction");
     // qmlRegisterType(URI("controls/action/Action.qml"), PUBLIC_URI, 1, 0, "Action");
     // qmlRegisterType(URI("controls/applicationwindow/ApplicationWindow.qml"), PUBLIC_URI, 1, 0, "ApplicationWindow");
     // qmlRegisterType(URI("controls/welcome/WelcomeScreen.qml"), PUBLIC_URI, 1, 0, "WelcomeScreen");

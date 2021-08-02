@@ -19,8 +19,10 @@ class KijeAction : public QObject
 
     Q_PROPERTY(QString identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
-    Q_PROPERTY(QQmlListProperty<KijeAction> childActions READ childActions)
+    Q_PROPERTY(QVariant shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
 
+    Q_PROPERTY(QQmlListProperty<KijeAction> childActions READ childActions)
     Q_CLASSINFO("DefaultProperty", "childActions")
 
     struct Private;
@@ -48,5 +50,13 @@ public:
     void setText(const QString& text);
     Q_SIGNAL void textChanged();
 
-    Q_INVOKABLE void triggered();
+    QVariant shortcut() const;
+    void setShortcut(const QVariant& shortcut);
+    Q_SIGNAL void shortcutChanged();
+
+    bool enabled() const;
+    void setEnabled(bool enabled);
+    Q_SIGNAL void enabledChanged();
+
+    Q_SIGNAL void triggered();
 };
