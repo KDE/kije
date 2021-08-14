@@ -11,6 +11,7 @@
 #include "kije_app.h"
 #include "toolbar_private.h"
 #include "kije_window.h"
+#include "kije_page.h"
 
 #include "kije_plugin.h"
 
@@ -25,6 +26,7 @@ void KijePlugin::registerTypes(const char * uri) {
     qmlRegisterType<KijeApp>(PUBLIC_URI, 1, 0, "App");
     qmlRegisterType<KijeAction>(PUBLIC_URI, 1, 0, "Action");
     qmlRegisterType<KijeWindow>(PUBLIC_URI, 1, 0, "Window");
+    qmlRegisterType<KijePage>(PUBLIC_URI, 1, 0, "Page");
 
     qmlRegisterType(URI("controls/actions/EditAction.qml"), PUBLIC_URI, 1, 0, "EditAction");
     // qmlRegisterType(URI("controls/action/Action.qml"), PUBLIC_URI, 1, 0, "Action");

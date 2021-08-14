@@ -19,6 +19,7 @@ class KijeAction : public QObject
 
     Q_PROPERTY(QString identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QString editLabel READ editLabel WRITE setEditLabel NOTIFY editLabelChanged)
     Q_PROPERTY(QVariant shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
 
@@ -49,6 +50,10 @@ public:
     QString text() const;
     void setText(const QString& text);
     Q_SIGNAL void textChanged();
+
+    QString editLabel() const;
+    void setEditLabel(const QString& text);
+    Q_SIGNAL void editLabelChanged();
 
     QVariant shortcut() const;
     void setShortcut(const QVariant& shortcut);

@@ -13,6 +13,7 @@ struct KijeAction::Private
 {
     QString identifier;
     QString text;
+    QString editLabel;
 
     QVariant shortcut;
     std::optional<int> shortcutHandle;

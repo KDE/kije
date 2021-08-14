@@ -52,6 +52,16 @@ void KijeAction::setText(const QString& text)
     synthesize_set(text, textChanged);
 }
 
+QString KijeAction::editLabel() const
+{
+    return d->editLabel.isEmpty() ? d->text : d->editLabel;
+}
+
+void KijeAction::setEditLabel(const QString& editLabel)
+{
+    synthesize_set(editLabel, editLabelChanged);
+}
+
 QQmlListProperty<KijeAction> KijeAction::childActions()
 {
     return QQmlListProperty<KijeAction>{this, &d->actions};

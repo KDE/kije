@@ -8,9 +8,11 @@
 
 #include <QObject>
 #include <QQmlListProperty>
+#include <QQmlParserStatus>
 
 class KijeAction;
 class QWindow;
+class QQmlComponent;
 
 class KijeAbstractApp : public QObject
 {
@@ -39,15 +41,34 @@ public:
 
 };
 
-class KijeDocApp : public KijeAbstractApp
+class KijeDocApp : public KijeAbstractApp, public QQmlParserStatus
 {
 
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
+
+    struct Private;
+    QScopedPointer<Private> d;
+
+    Q_PROPERTY(QQmlComponent* viewDelegate READ viewDelegate WRITE setViewDelegate NOTIFY viewDelegateChanged)
+
+private:
+
+    void firstLoad();
+    void load();
+    void save();
 
 public:
 
     explicit KijeDocApp(QObject* parent = nullptr);
     ~KijeDocApp();
+
+    QQmlComponent* viewDelegate() const;
+    void setViewDelegate(QQmlComponent* viewDelegate);
+    Q_SIGNAL void viewDelegateChanged();
+
+    void classBegin() override;
+    void componentComplete() override;
 
 };
 
@@ -57,6 +78,7 @@ class KijeApp : public KijeAbstractApp
     Q_OBJECT
 
 public:
+
     explicit KijeApp(QObject* parent = nullptr);
     ~KijeApp();
 
