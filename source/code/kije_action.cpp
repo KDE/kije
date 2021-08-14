@@ -9,6 +9,8 @@
 #include <QQuickRenderControl> 
 #include <QQuickWindow>
 
+#include <KAuthorized>
+
 #include <QtGui/private/qguiapplication_p.h>
 
 #include "kije_action_p.h"
@@ -134,6 +136,9 @@ void KijeAction::setShortcut(const QVariant& shortcut)
 
 bool KijeAction::enabled() const
 {
+    if (!KAuthorized::authorizeAction(d->identifier)) {
+        return false;
+    }
     return d->enabled;
 }
 
