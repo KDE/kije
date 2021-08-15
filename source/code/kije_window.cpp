@@ -7,6 +7,7 @@
 #include <QJsonDocument>
 #include <QJSValue>
 #include <QQmlEngine>
+#include <QQuickItem>
 #include <QScreen>
 
 #include <KConfigGroup>
@@ -107,4 +108,35 @@ void KijeWindow::componentComplete()
 
     d->state = qmlEngine(this)->evaluate(doku.toJson());
     Q_EMIT stateChanged();
+}
+
+KijeWindowAttached* KijeWindow::qmlAttachedProperties(QObject *it)
+{
+    auto item = qobject_cast<QQuickItem*>(it);
+    if (!item) {
+        return nullptr;
+    }
+
+    return new KijeWindowAttached(item);
+}
+
+void KijeWindowAttached::handleWindowChanged(QQuickWindow* newWindow)
+{
+    if (newWindow != win) {
+        return;
+    }
+
+    win = qobject_cast<KijeWindow*>(newWindow);
+    Q_EMIT windowChanged();
+}
+
+KijeWindowAttached::KijeWindowAttached(QQuickItem* it)
+{
+    forItem = it;
+
+    connect(forItem, &QQuickItem::windowChanged, this, &KijeWindowAttached::handleWindowChanged);
+
+    if (forItem->window()) {
+        handleWindowChanged(forItem->window());
+    }
 }

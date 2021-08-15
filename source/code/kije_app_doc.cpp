@@ -7,9 +7,11 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 
+#include <QQmlProperty>
 #include <QUuid>
 
 #include "kije_app_doc_p.h"
+#include "kije_page.h"
 
 KijeDocApp::KijeDocApp(QObject* parent) : KijeAbstractApp(parent), d(new Private)
 {
@@ -51,7 +53,19 @@ void KijeDocApp::firstLoad()
     auto win = new KijeWindow();
     win->setIdentifier(newIdent());
 
+    auto obj = d->viewDelegate->beginCreate(qmlContext(this));
+    auto page = qobject_cast<KijePage*>(obj);
+    if (!page) {
+        auto dat = d->viewDelegate->errorString().toLocal8Bit();
+        qFatal("KijeDocApp::firstLoad: the viewDelegate of a KijeDocApp must be a KijePage!\n%s", dat.data());
+    }
+
+    page->setParentItem(win->contentItem());
+    qvariant_cast<QObject*>(page->property("anchors"))->setProperty("fill", QVariant::fromValue(page->parentItem()));
+    d->viewDelegate->completeCreate();
+
     win->componentComplete();
+    win->show();
 }
 
 void KijeDocApp::load()
@@ -76,5 +90,5 @@ void KijeDocApp::classBegin()
 
 void KijeDocApp::componentComplete()
 {
-
+    load();
 }

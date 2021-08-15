@@ -9,6 +9,26 @@
 #include <QQuickWindow>
 
 class KijeAction;
+class KijeWindow;
+
+class KijeWindowAttached : public QObject
+{
+
+    Q_OBJECT
+
+    QQuickItem* forItem = nullptr;
+    KijeWindow* win = nullptr;
+
+    Q_PROPERTY(KijeWindow* win MEMBER win NOTIFY windowChanged)
+
+public:
+
+    Q_SIGNAL void windowChanged();
+
+    KijeWindowAttached(QQuickItem* item);
+    void handleWindowChanged(QQuickWindow* newWindow);
+
+};
 
 class KijeWindow : public QQuickWindow, public QQmlParserStatus
 {
@@ -40,4 +60,8 @@ public:
     void classBegin() override;
     void componentComplete() override;
 
+    static KijeWindowAttached *qmlAttachedProperties(QObject *);
+
 };
+
+QML_DECLARE_TYPEINFO(KijeWindow, QML_HAS_ATTACHED_PROPERTIES)
