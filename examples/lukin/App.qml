@@ -6,6 +6,8 @@ import org.kde.kirigami 2.15 as Kirigami
 import org.kde.kije 1.0
 
 DocApp {
+    id: app
+
     actions: [
         Action {
             identifier: "foo"
@@ -17,6 +19,11 @@ DocApp {
         },
         Action {
             text: "File"
+
+            Action {
+                text: "New Window"
+                onTriggered: app.newWindow()
+            }
         },
         EditAction { }
     ]
@@ -30,10 +37,16 @@ DocApp {
 
         id: view
 
-        Window.win.state: []
+        Component.onDestruction: {
+            this.state = {
+                "backStack": view.backStack,
+                "forwardStack": view.forwardStack,
+                "location": folderModel.folder,
+            }
+        }
 
-        property var backStack: []
-        property var forwardStack: []
+        property var backStack: (view.state || {backStack: []})["backStack"] || []
+        property var forwardStack: (view.state || {forwardStack: []})["forwardStack"] || []
 
         function clickGoTo(folder) {
             backStack = backStack.concat([folderModel.folder])
@@ -65,6 +78,7 @@ DocApp {
             }
             model: FLM.FolderListModel {
                 id: folderModel
+                folder: view.state["location"]
 
                 showDirsFirst: true
             }

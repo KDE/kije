@@ -54,6 +54,7 @@ class KijeDocApp : public KijeAbstractApp, public QQmlParserStatus
 
 private:
 
+    void newWindow(const QString& ident);
     void firstLoad();
     void load();
     void save();
@@ -66,6 +67,8 @@ public:
     QQmlComponent* viewDelegate() const;
     void setViewDelegate(QQmlComponent* viewDelegate);
     Q_SIGNAL void viewDelegateChanged();
+
+    Q_INVOKABLE void newWindow();
 
     void classBegin() override;
     void componentComplete() override;

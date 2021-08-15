@@ -30,3 +30,18 @@ void KijePage::setActions(const QStringList& actions)
     d->actions = std::move(actions);
     Q_EMIT actionsChanged();
 }
+
+QJSValue KijePage::state() const
+{
+    return d->state;
+}
+
+void KijePage::setState(QJSValue state)
+{
+    if (d->state.equals(state)) {
+        return;
+    }
+
+    d->state = state;
+    Q_EMIT stateChanged();
+}

@@ -13,6 +13,7 @@ class KijePage : public QQuickItem
 
     Q_OBJECT
     Q_PROPERTY(QStringList actions READ actions WRITE setActions NOTIFY actionsChanged)
+    Q_PROPERTY(QJSValue state READ state WRITE setState NOTIFY stateChanged)
 
     struct Private;
     QScopedPointer<Private> d;
@@ -21,6 +22,10 @@ public:
 
     explicit KijePage(QQuickItem* parent = nullptr);
     ~KijePage();
+
+    QJSValue state() const;
+    void setState(QJSValue state);
+    Q_SIGNAL void stateChanged();
 
     QStringList actions() const;
     void setActions(const QStringList& actions);

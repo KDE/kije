@@ -11,4 +11,5 @@
 struct KijePage::Private
 {
     QStringList actions;
+    QJSValue state;
 };

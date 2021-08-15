@@ -7,6 +7,7 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 
+#include <QQmlEngine>
 #include <QQmlProperty>
 #include <QUuid>
 
@@ -20,7 +21,7 @@ KijeDocApp::KijeDocApp(QObject* parent) : KijeAbstractApp(parent), d(new Private
 
 KijeDocApp::~KijeDocApp()
 {
-
+    save();
 }
 
 QQmlComponent* KijeDocApp::viewDelegate() const
@@ -48,10 +49,12 @@ inline QString newIdent()
     return ident(QUuid::createUuid());
 }
 
-void KijeDocApp::firstLoad()
+void KijeDocApp::newWindow(const QString& ident)
 {
     auto win = new KijeWindow();
-    win->setIdentifier(newIdent());
+    win->setIdentifier(ident);
+    qmlEngine(this)->setContextForObject(win, qmlContext(this));
+    win->componentComplete();
 
     auto obj = d->viewDelegate->beginCreate(qmlContext(this));
     auto page = qobject_cast<KijePage*>(obj);
@@ -60,12 +63,26 @@ void KijeDocApp::firstLoad()
         qFatal("KijeDocApp::firstLoad: the viewDelegate of a KijeDocApp must be a KijePage!\n%s", dat.data());
     }
 
+    page->setState(win->state());
+    connect(win, &KijeWindow::stateChanged, page, [page, win]() {
+        page->setState(win->state());
+    });
+    connect(page, &KijePage::stateChanged, page, [page, win]() {
+        win->setState(page->state());
+    });
+    d->viewDelegate->completeCreate();
+    page->setState(win->state());
+
     page->setParentItem(win->contentItem());
     qvariant_cast<QObject*>(page->property("anchors"))->setProperty("fill", QVariant::fromValue(page->parentItem()));
-    d->viewDelegate->completeCreate();
+    d->windows << win;
 
-    win->componentComplete();
     win->show();
+}
+
+void KijeDocApp::firstLoad()
+{
+    newWindow(newIdent());
 }
 
 void KijeDocApp::load()
@@ -73,15 +90,30 @@ void KijeDocApp::load()
     auto config = KSharedConfig::openConfig();
     auto group = config->group("org.kde.kije").group("views");
 
-    if (group.keyList().isEmpty()) {
+    if (group.groupList().isEmpty()) {
         firstLoad();
         return;
+    }
+
+    for (const auto& it : group.groupList()) {
+        newWindow(it);
     }
 }
 
 void KijeDocApp::save()
 {
+    auto config = KSharedConfig::openConfig();
+    auto group = config->group("org.kde.kije").group("views");
 
+    for (auto it : d->windows) {
+        group.group(it->identifier()).writeEntry("_dummy", true);
+        delete it;
+    }
+}
+
+void KijeDocApp::newWindow()
+{
+    newWindow(newIdent());
 }
 
 void KijeDocApp::classBegin()
