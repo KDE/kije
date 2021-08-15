@@ -16,6 +16,11 @@ DocApp {
     menubar: [
         Action {
             text: "Lukin"
+
+            Action {
+                text: "Quit"
+                onTriggered: Qt.quit()
+            }
         },
         Action {
             text: "File"
