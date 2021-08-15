@@ -95,6 +95,7 @@ QPlatformMenuItem* KijeAction::intoPlatformMenuItem(QPlatformMenu* of)
     auto item = of->createMenuItem();
 
     conn(this, &KijeAction::textChanged, &KijeAction::text, item, &QPlatformMenuItem::setText);
+    conn(this, &KijeAction::enabledChanged, &KijeAction::enabled, item, &QPlatformMenuItem::setEnabled);
 
     item->setShortcut(toSequence(shortcut()));
     QObject::connect(this, &KijeAction::shortcutChanged, item, [this, item]() {

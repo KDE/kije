@@ -17,4 +17,5 @@ struct KijeDocApp::Private
 {
     QPointer<QQmlComponent> viewDelegate;
     QList<KijeWindow*> windows;
+    KijePage* activePage = nullptr;
 };

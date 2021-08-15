@@ -25,7 +25,28 @@ DocApp {
                 onTriggered: app.newWindow()
             }
         },
-        EditAction { }
+        EditAction { },
+        Action {
+            text: "Navigation"
+
+            Action {
+                text: "Forward"
+                shortcut: "Ctrl+A"
+                enabled: app.activePage.forwardStack.length > 0
+                onTriggered: app.activePage.clickForward()
+            }
+            Action {
+                text: "Back"
+                shortcut: "Ctrl+D"
+                enabled: app.activePage.backStack.length > 0
+                onTriggered: app.activePage.clickBack()
+            }
+            Action {
+                text: "Up"
+                shortcut: "Ctrl+W"
+                onTriggered: app.activePage.clickUp()
+            }
+        }
     ]
     viewDelegate: Page {
         actions: ["foo", "bar"]
@@ -69,6 +90,9 @@ DocApp {
             backStack = backStack.concat([goTo])
 
             folderModel.folder = goTo
+        }
+        function clickUp() {
+            view.clickGoTo(folderModel.parentFolder)
         }
 
         GridView {

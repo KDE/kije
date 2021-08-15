@@ -11,6 +11,7 @@
 #include <QQmlParserStatus>
 
 class KijeAction;
+class KijePage;
 class QWindow;
 class QQmlComponent;
 
@@ -51,6 +52,7 @@ class KijeDocApp : public KijeAbstractApp, public QQmlParserStatus
     QScopedPointer<Private> d;
 
     Q_PROPERTY(QQmlComponent* viewDelegate READ viewDelegate WRITE setViewDelegate NOTIFY viewDelegateChanged)
+    Q_PROPERTY(KijePage* activePage READ activePage NOTIFY activePageChanged)
 
 private:
 
@@ -67,6 +69,9 @@ public:
     QQmlComponent* viewDelegate() const;
     void setViewDelegate(QQmlComponent* viewDelegate);
     Q_SIGNAL void viewDelegateChanged();
+
+    KijePage* activePage() const;
+    Q_SIGNAL void activePageChanged();
 
     Q_INVOKABLE void newWindow();
 

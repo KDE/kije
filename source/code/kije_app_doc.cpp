@@ -14,6 +14,8 @@
 #include "kije_app_doc_p.h"
 #include "kije_page.h"
 
+#include <QtQuick/private/qquickevents_p_p.h>
+
 KijeDocApp::KijeDocApp(QObject* parent) : KijeAbstractApp(parent), d(new Private)
 {
 
@@ -63,12 +65,32 @@ void KijeDocApp::newWindow(const QString& ident)
         qFatal("KijeDocApp::firstLoad: the viewDelegate of a KijeDocApp must be a KijePage!\n%s", dat.data());
     }
 
+    page->setParent(win);
     page->setState(win->state());
     connect(win, &KijeWindow::stateChanged, page, [page, win]() {
         page->setState(win->state());
     });
     connect(page, &KijePage::stateChanged, page, [page, win]() {
         win->setState(page->state());
+    });
+    connect(win, &QWindow::activeChanged, this, [this, win, page]() {
+        if (win->isActive()) {
+            d->activePage = page;
+            Q_EMIT activePageChanged();
+        }
+    });
+    connect(win, &QQuickWindow::closing, this, [this, win, page]() {
+        if (d->windows.length() < 2) {
+            return;
+        }
+
+        auto config = KSharedConfig::openConfig();
+        auto group = config->group("org.kde.kije").group("views");
+        group.deleteGroup(win->identifier());
+
+        d->windows.removeAll(win);
+        page->deleteLater();
+        win->deleteLater();
     });
     d->viewDelegate->completeCreate();
     page->setState(win->state());
@@ -83,6 +105,11 @@ void KijeDocApp::newWindow(const QString& ident)
 void KijeDocApp::firstLoad()
 {
     newWindow(newIdent());
+}
+
+KijePage* KijeDocApp::activePage() const
+{
+    return d->activePage;
 }
 
 void KijeDocApp::load()
