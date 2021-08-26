@@ -30,6 +30,14 @@ target_link_libraries(
         KF5::ConfigCore
 )
 
+if(ENABLE_KIJE_WIDGET_EMBED)
+    target_link_libraries(
+        kijeplugin
+        PRIVATE
+            Qt5::Widgets
+    )
+endif()
+
 add_custom_command(
     TARGET kijeplugin
     POST_BUILD

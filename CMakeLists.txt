@@ -30,6 +30,13 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 
 find_package(Qt5 COMPONENTS Core Quick Gui REQUIRED)
+
+option(ENABLE_KIJE_WIDGET_EMBED "enabled kije widget embed" ON)
+if(ENABLE_KIJE_WIDGET_EMBED)
+    add_compile_definitions(USE_KIJE_WIDGET_EMBED)
+    find_package(Qt5 COMPONENTS Widgets REQUIRED)
+endif()
+
 find_package(KF5Config)
 
 file ( GLOB kSources source/code/*.cpp )

@@ -18,6 +18,8 @@
 #define PUBLIC_URI "org.kde.kije"
 #define PRIVATE_URI "org.kde.kije.private"
 
+#include "kije_widget_embed.h"
+
 #define URI(x) fromBase(QStringLiteral(x))
 
 void KijePlugin::registerTypes(const char * uri) {
@@ -27,6 +29,10 @@ void KijePlugin::registerTypes(const char * uri) {
     qmlRegisterType<KijeAction>(PUBLIC_URI, 1, 0, "Action");
     qmlRegisterType<KijeWindow>(PUBLIC_URI, 1, 0, "Window");
     qmlRegisterType<KijePage>(PUBLIC_URI, 1, 0, "Page");
+
+#ifdef USE_KIJE_WIDGET_EMBED
+    qmlRegisterType<KijeWidgetEmbed>(PUBLIC_URI, 1, 0, "WidgetEmbed");
+#endif
 
     qmlRegisterType(URI("controls/actions/EditAction.qml"), PUBLIC_URI, 1, 0, "EditAction");
     // qmlRegisterType(URI("controls/action/Action.qml"), PUBLIC_URI, 1, 0, "Action");
