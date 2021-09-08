@@ -19,20 +19,22 @@ class KijeWindow : public QQuickWindow, public QQmlParserStatus
     struct Private;
     QScopedPointer<Private> d;
 
-    Q_PROPERTY(QJSValue state READ state WRITE setState NOTIFY stateChanged)
     Q_PROPERTY(QString identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged)
 
     void saveScreen();
     void restoreScreen();
+    void saveState();
+
+protected:
+    bool event(QEvent *event) override;
 
 public:
 
     explicit KijeWindow(QWindow* parent = nullptr);
     ~KijeWindow();
 
-    QJSValue state() const;
-    void setState(const QJSValue& state);
-    Q_SIGNAL void stateChanged();
+    Q_SIGNAL void writeState(QJSValue state);
+    Q_SIGNAL void restoreState(QJSValue state);
 
     QString identifier() const;
     void setIdentifier(const QString& identifier);

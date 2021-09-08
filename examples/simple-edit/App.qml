@@ -18,21 +18,19 @@ DocApp {
         EditAction { }
     ]
 
-    property Window win: Window {
-        id: win
+    viewDelegate: Page {
+        Rectangle {
+            color: "black"
+            anchors.fill: parent
+        }
 
-        identifier: "foo"
-
-        color: "green"
-        width: 200
-        height: 200
-        visible: true
-
-        state: [foo.text]
+        onWriteState: (state) => state.text = foo.text
+        onRestoreState: (state) => {
+            if (state.text) foo.text = state.text
+        }
 
         QQC2.TextField {
             id: foo
-            text: win.state[0]
         }
     }
 }

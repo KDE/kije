@@ -28,6 +28,7 @@ target_link_libraries(
         Qt5::QuickPrivate
         Qt5::Qml
         KF5::ConfigCore
+        KF5::ConfigGui
 )
 
 if(ENABLE_KIJE_WIDGET_EMBED)

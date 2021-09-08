@@ -54,9 +54,6 @@ inline QString newIdent()
 void KijeDocApp::newWindow(const QString& ident)
 {
     auto win = new KijeWindow();
-    win->setIdentifier(ident);
-    qmlEngine(this)->setContextForObject(win, qmlContext(this));
-    win->componentComplete();
 
     auto obj = d->viewDelegate->beginCreate(qmlContext(this));
     auto page = qobject_cast<KijePage*>(obj);
@@ -65,14 +62,14 @@ void KijeDocApp::newWindow(const QString& ident)
         qFatal("KijeDocApp::firstLoad: the viewDelegate of a KijeDocApp must be a KijePage!\n%s", dat.data());
     }
 
+    connect(win, &KijeWindow::writeState, page, &KijePage::writeState);
+    connect(win, &KijeWindow::restoreState, page, &KijePage::restoreState);
+
+    win->setIdentifier(ident);
+    qmlEngine(this)->setContextForObject(win, qmlContext(this));
+    win->componentComplete();
     page->setParent(win);
-    page->setState(win->state());
-    connect(win, &KijeWindow::stateChanged, page, [page, win]() {
-        page->setState(win->state());
-    });
-    connect(page, &KijePage::stateChanged, page, [page, win]() {
-        win->setState(page->state());
-    });
+
     connect(win, &QWindow::activeChanged, this, [this, win, page]() {
         if (win->isActive()) {
             d->activePage = page;
@@ -92,8 +89,8 @@ void KijeDocApp::newWindow(const QString& ident)
         page->deleteLater();
         win->deleteLater();
     });
+
     d->viewDelegate->completeCreate();
-    page->setState(win->state());
 
     page->setParentItem(win->contentItem());
     qvariant_cast<QObject*>(page->property("anchors"))->setProperty("fill", QVariant::fromValue(page->parentItem()));

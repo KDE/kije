@@ -63,16 +63,19 @@ DocApp {
 
         id: view
 
-        Component.onDestruction: {
-            this.state = {
-                "backStack": view.backStack,
-                "forwardStack": view.forwardStack,
-                "location": folderModel.folder,
-            }
+        onWriteState: (state) => {
+            state["backStack"] = view.backStack
+            state["forwardStack"] = view.forwardStack
+            state["location"] = folderModel.folder
+        }
+        onRestoreState: (state) => {
+            if (state.backStack) this.backStack = state.backStack
+            if (state.forwardStack) this.forwardStack = state.forwardStack
+            if (state.location) folderModel.folder = state.location
         }
 
-        property var backStack: (view.state || {backStack: []})["backStack"] || []
-        property var forwardStack: (view.state || {forwardStack: []})["forwardStack"] || []
+        property var backStack: []
+        property var forwardStack: []
 
         function clickGoTo(folder) {
             backStack = backStack.concat([folderModel.folder])
@@ -107,7 +110,6 @@ DocApp {
             }
             model: FLM.FolderListModel {
                 id: folderModel
-                folder: view.state["location"]
 
                 showDirsFirst: true
             }

@@ -13,42 +13,47 @@
 
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <KWindowConfig>
 
 #include "kije_window.h"
 #include "kije_app.h"
 
 struct KijeWindow::Private
 {
-    QJSValue state;
+    QQmlEngine* eng = nullptr;
     QString identifier;
 };
 
 KijeWindow::KijeWindow(QWindow* parent) : QQuickWindow(parent), d(new Private)
 {
-
 }
 
-KijeWindow::~KijeWindow()
+void KijeWindow::saveState()
 {
     auto config = KSharedConfig::openConfig();
     auto group = config->group("org.kde.kije").group("windows").group(d->identifier);
 
-    auto doku = QJsonDocument::fromVariant(d->state.toVariant());
+    QJSValue it = d->eng->newObject();
+    Q_EMIT writeState(it);
+
+    auto doku = QJsonDocument::fromVariant(it.toVariant());
     group.writeEntry("state", doku.toJson());
     group.config()->sync();
 
     saveScreen();
 }
 
-QJSValue KijeWindow::state() const
+bool KijeWindow::event(QEvent *event)
 {
-    return d->state;
+    if (event->type() == QEvent::Close) {
+        saveState();
+    }
+
+    return QQuickWindow::event(event);
 }
 
-void KijeWindow::setState(const QJSValue& state)
+KijeWindow::~KijeWindow()
 {
-    d->state = state;
-    Q_EMIT stateChanged();
 }
 
 QString KijeWindow::identifier() const
@@ -77,7 +82,8 @@ void KijeWindow::saveScreen()
     auto config = KSharedConfig::openConfig();
     auto group = config->group("org.kde.kije").group("windows").group(d->identifier);
 
-    group.writeEntry("geometry", geometry());
+    KWindowConfig::saveWindowSize(this, group);
+    KWindowConfig::saveWindowPosition(this, group);
 }
 
 void KijeWindow::restoreScreen()
@@ -85,11 +91,8 @@ void KijeWindow::restoreScreen()
     auto config = KSharedConfig::openConfig();
     auto group = config->group("org.kde.kije").group("windows").group(d->identifier);
 
-    if (!group.hasKey("geometry")) {
-        return;
-    }
-
-    setGeometry(group.readEntry("geometry", QRect()));
+    KWindowConfig::restoreWindowSize(this, group);
+    KWindowConfig::restoreWindowPosition(this, group);
 }
 
 void KijeWindow::componentComplete()
@@ -108,6 +111,6 @@ void KijeWindow::componentComplete()
     auto doku = QJsonDocument::fromJson(group.readEntry("state", QByteArray()));
 
     auto prog = QString("(() => { return %1 })()").arg(doku.toJson().data());
-    d->state = qmlEngine(this)->evaluate(prog);
-    Q_EMIT stateChanged();
+    d->eng = qmlEngine(this);
+    Q_EMIT restoreState(qmlEngine(this)->evaluate(prog));
 }
